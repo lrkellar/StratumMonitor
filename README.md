@@ -13,7 +13,9 @@
 Everyone who signs in sees the same monitor. Names listed in `admins` also get an **Accounts** panel: it lists the sign-ins and turns a name and password into a hashed line. Paste that line under `[passwords]` in the app's Secrets and Save; the app restarts itself. To remove a person, delete their line. The app never stores or changes passwords on its own.
 
 ## How it behaves
-- Reads every sensor from YoLink every 5 minutes (one read is shared by everyone viewing). "Refresh now" forces a read.
+- Reads YoLink in the background 8 times a day (every 3 hours from midnight, plus once when the app starts), one call per sensor, at most 50 calls every 10 minutes. A full pass over 360 sensors takes about 70 minutes. The page updates after each batch. "Refresh now" starts a reading early, at the same pace. To change the numbers add `[schedule]` with `readings_per_day`, `batch_calls` or `batch_minutes` to the secrets.
+- The monitor is not the leak alarm: a leak can be up to 3 hours old before it shows here. Keep YoLink's own phone alerts on for that.
+- Readings only happen while the app is awake. A free app sleeps when nobody has opened it for a while and reads again as soon as someone wakes it.
 - Sensors are matched to closets by name: `3130 01 Leak Sensor`, `3130 01 Thermometer Hygrometer`.
 - With no `[yolink]` secrets it runs in demo mode with fake sensors.
 - The sparkline history lasts only while the app is awake; the long-term record is the YoLink app. Use the monitor's Library button to replay YoLink exports.
