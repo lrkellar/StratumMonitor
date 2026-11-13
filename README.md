@@ -5,10 +5,12 @@
 ## Put it online (Streamlit Community Cloud, free)
 1. Create a **private** GitHub repository and upload everything in this folder (keep the folder layout).
 2. Go to share.streamlit.io, sign in with GitHub, click **Create app**, pick the repository, and set the main file to `streamlit_app.py`.
-3. Open **Advanced settings** and paste the contents of `.streamlit/secrets.toml.example` into **Secrets**, filled in with your YoLink UAID and Secret Key and a name and password for each person.
-4. Deploy. Send coworkers the app link and their name and password.
+3. Open **Advanced settings** and paste the contents of `.streamlit/secrets.toml.example` into **Secrets**, filled in with your YoLink UAID and Secret Key and a password for `admin` and `stratum`.
+4. Deploy. An app deployed from a private repository starts out visible only to you: open the app's **Share** button and make it public so coworkers reach the sign-in page without a Streamlit invitation. The repository stays private.
+5. Send coworkers the app link and their name and password.
 
-To add or remove a person later: App settings > Secrets, edit the `[passwords]` list, Save.
+## Accounts
+Everyone who signs in sees the same monitor. Names listed in `admins` also get an **Accounts** panel: it lists the sign-ins and turns a name and password into a hashed line. Paste that line under `[passwords]` in the app's Secrets and Save; the app restarts itself. To remove a person, delete their line. The app never stores or changes passwords on its own.
 
 ## How it behaves
 - Reads every sensor from YoLink every 5 minutes (one read is shared by everyone viewing). "Refresh now" forces a read.
@@ -18,5 +20,9 @@ To add or remove a person later: App settings > Secrets, edit the `[passwords]` 
 - A free app goes to sleep when nobody has used it for a while; the first visit afterwards takes about a minute to wake.
 
 ## Run on your own PC instead
+Double-click `Run locally.bat` (the first run opens the secrets file for you to fill in), or:
+
     pip install -r requirements.txt
     streamlit run streamlit_app.py
+
+Each read also writes `yolink_diagnostics.json` (what YoLink returned, ids and tokens removed) for troubleshooting.
